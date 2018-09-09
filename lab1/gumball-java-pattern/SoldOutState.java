@@ -1,5 +1,3 @@
-
-
 public class SoldOutState implements State {
     GumballMachine gumballMachine;
  
@@ -7,7 +5,7 @@ public class SoldOutState implements State {
         this.gumballMachine = gumballMachine;
     }
  
-	public void insertQuarter() {
+	public void insertCoin(int value) {
 		System.out.println("You can't insert a quarter, the machine is sold out");
 	}
  

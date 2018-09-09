@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 
 public class GumballMachine {
@@ -6,24 +7,52 @@ public class GumballMachine {
 	State noQuarterState;
 	State hasQuarterState;
 	State soldState;
- 
+	State invalidCoinState;
 	State state = soldOutState;
+	
 	int count = 0;
+	int cost = 0;
+	int total_money = 0;
+	ArrayList<Integer> accepted_coins;
  
-	public GumballMachine(int numberGumballs) {
+	public GumballMachine(int numberGumballs, int machineNumber) {
 		soldOutState = new SoldOutState(this);
-		noQuarterState = new NoQuarterState(this);
+		noQuarterState = new NotEnoughMoneyState(this);
 		hasQuarterState = new HasQuarterState(this);
 		soldState = new SoldState(this);
-
+		invalidCoinState = new NotValidCoinState(this);
+		if (machineNumber == 1) {
+			this.cost = 25;
+			this.accepted_coins.add(25);
+		}
+		else if (machineNumber == 2) {
+			this.cost = 50;
+			this.accepted_coins.add(25);
+		}
+		else if (machineNumber == 3) {
+			this.cost = 50;
+			this.accepted_coins.add(5);
+			this.accepted_coins.add(10);
+			this.accepted_coins.add(25);
+		}
+		
 		this.count = numberGumballs;
  		if (numberGumballs > 0) {
 			state = noQuarterState;
 		} 
 	}
- 
-	public void insertQuarter() {
-		state.insertQuarter();
+
+	public void insertCoin(int value) {
+		if (state == invalidCoinState) {
+			System.out.println("Complete earlier transaction first, eject the invalid coin");
+		}
+		else {
+			this.total_money = total_money + value;
+			if (!this.accepted_coins.contains(value)) {
+				state = invalidCoinState;
+			}		
+			state.insertCoin(value);
+		}
 	}
  
 	public void ejectQuarter() {
@@ -43,11 +72,16 @@ public class GumballMachine {
 		System.out.println("A gumball comes rolling out the slot...");
 		if (count != 0) {
 			count = count - 1;
+			total_money = total_money - cost;
 		}
 	}
  
 	int getCount() {
 		return count;
+	}
+	
+	int getMoneyCollected() {
+		return total_money;
 	}
  
 	void refill(int count) {
@@ -73,6 +107,10 @@ public class GumballMachine {
 
     public State getSoldState() {
         return soldState;
+    }
+    
+    public State getNotValidCoinState() {
+        return invalidCoinState;
     }
  
 	public String toString() {
