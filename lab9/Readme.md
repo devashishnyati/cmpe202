@@ -1,4 +1,4 @@
-####Traditional Decorator
+#### Traditional Decorator
 In the conventional approach we create decorator classes for toppings and cheese which are decorated later.
 
 	public static void main(String args[]) {
@@ -13,7 +13,7 @@ In the conventional approach we create decorator classes for toppings and cheese
 		System.out.println(pizza2.getDescription());
 	}
 
-####Lambda Decorator
+#### Lambda Decorator
 Instead of creating decorator classes, we directly pass them by lambda functions. So we don't need to write decorator classes.
 
 	public static void main(String args[]) {
